@@ -1,0 +1,22 @@
+FROM golang:1.11-alpine
+
+ENV ENTRYKIT_VERSION 0.4.0
+ENV GO111MODULE=on
+ENV GOPATH=""
+ENV CGO_ENABLED=0
+
+RUN apk update && \
+        apk upgrade && \
+        apk add git
+
+RUN wget https://github.com/progrium/entrykit/releases/download/v${ENTRYKIT_VERSION}/entrykit_${ENTRYKIT_VERSION}_Linux_x86_64.tgz \
+    && tar -xvzf entrykit_${ENTRYKIT_VERSION}_Linux_x86_64.tgz \
+    && rm entrykit_${ENTRYKIT_VERSION}_Linux_x86_64.tgz \
+    && mv entrykit /bin/entrykit \
+    && chmod +x /bin/entrykit \
+    && entrykit --symlink
+
+WORKDIR /go
+
+ENTRYPOINT [ \
+    "prehook", "go version", "--"]
