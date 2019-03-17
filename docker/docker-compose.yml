@@ -12,7 +12,7 @@ services:
     - "1323:1323"
     volumes:
     - ../:/go
-    - cache:/go
+    - data-app-auth465
     command: > 
       go run
       server.go
