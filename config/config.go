@@ -19,6 +19,8 @@ type DataBaseConfig struct {
 	User     string `toml:"user"`
 	Password string `toml:"password"`
 	DbName   string `toml:"dbName"`
+	MaxIdleConn int `toml:"maxIdleConn"`
+	MaxOpenConn int `toml:"maxOpenConn"`
 }
 
 // Initialization configuration for project 
