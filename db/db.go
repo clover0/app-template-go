@@ -34,7 +34,3 @@ func NewDB() *sqlx.DB {
 
 	return db
 }
-
-//func migrate(db *sqlx.DB) error {
-//	db.
-//}

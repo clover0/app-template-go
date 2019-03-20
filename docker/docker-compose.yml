@@ -26,6 +26,7 @@ services:
     image: postgres:10.5
     container_name: postgresql_auth465
     volumes:
+    - ../db/migration:/home/db/migration
     - data-postgresql-auth465
     expose:
     - "5432"
