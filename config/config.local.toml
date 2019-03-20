@@ -1,0 +1,10 @@
+title = "configuration for local environment"
+
+[database]
+host = "localhost"
+port = 15432
+user = "postgres"
+password = "password" # dont write! on production,staging environment. 
+dbName = "auth465"
+
+ 
