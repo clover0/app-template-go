@@ -7,3 +7,6 @@
 ### database
 * データベースの作成
 `docker exec -it postgresql_auth465 psql -f /home/db/migration/sql/0.sql -U postgres`
+
+* マイグレーション実行
+docker exec -it postgresql_auth465 psql -f /home/db/migration/sql/ファイル名 -U postgres

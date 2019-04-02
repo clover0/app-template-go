@@ -16,6 +16,8 @@ func NewDB() *sqlx.DB {
 	port := config.Conf.DB.Port
 	password := config.Conf.DB.Password
 	dbName := config.Conf.DB.DbName
+	maxIdleConn := config.Conf.DB.MaxIdleConn
+	maxOpenConn := config.Conf.DB.MaxOpenConn
 
 	ds := fmt.Sprintf(
 		"user=%s host=%s port=%d password=%s dbname=%s sslmode=disable",
@@ -29,8 +31,16 @@ func NewDB() *sqlx.DB {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	db.SetMaxIdleConns(config.Conf.DB.MaxIdleConn)
-	db.SetMaxOpenConns(config.Conf.DB.MaxOpenConn)
+	db.SetMaxIdleConns(maxIdleConn)
+	db.SetMaxOpenConns(maxOpenConn)
+	log.Printf("database connected: user=%s host=%s port=%d password=*** dbname=%s sslmode=disable maxidle=%s maxopen=%s",
+		user,
+		host,
+		port,
+		dbName,
+		maxIdleConn,
+		maxOpenConn,
+	)
 
 	return db
 }
