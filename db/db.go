@@ -10,6 +10,8 @@ import (
 	_ "github.com/lib/pq"
 )
 
+var dbcon *sqlx.DB
+
 func NewDB() *sqlx.DB {
 	user := config.Conf.DB.User
 	host := config.Conf.DB.Host
@@ -42,5 +44,11 @@ func NewDB() *sqlx.DB {
 		maxOpenConn,
 	)
 
+	dbcon = db
+
 	return db
+}
+
+func GetConnection() *sqlx.DB {
+	return dbcon
 }
