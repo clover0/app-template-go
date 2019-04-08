@@ -2,27 +2,41 @@ package users
 
 import (
 	"auth465/core"
+
 	"github.com/jmoiron/sqlx"
 )
 
-func New(tx *sqlx.Tx) *core.UserStore {
-	return &userStore{tx}
+func New(db *sqlx.DB) core.UserStore {
+	return &userStore{db}
 }
 
 type userStore struct {
-	tx *sqlx.Tx
+	db *sqlx.DB
 }
 
 func (u *userStore) Find(id int64) (*core.User, error) {
-	row := u.tx.QueryRow(FindUser, id)
+	var err error
+	tx, err := u.db.Beginx()
+	if err != nil {
+		return nil, err
+	}
+	row := tx.QueryRow(FindUser, id)
 	var user core.User
-	err := row.Scan(&user)
+	err = row.Scan(&user)
+	if err != nil {
+		err = tx.Commit()
+	}
 	return &user, err
 }
 
 func (u *userStore) Create(user *core.User) error {
+	var err error
 	params := toParams(user)
-	_, err := u.tx.NamedExec(AddUser, params)
+	tx, err := u.db.Beginx()
+	if err != nil {
+		return err
+	}
+	_, err = tx.NamedExec(AddUser, params)
 	return err
 }
 

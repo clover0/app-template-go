@@ -13,9 +13,9 @@ services:
     volumes:
     - ../:/go
     - data-app-auth465
-    command: > 
-      go run
-      server.go
+    command: >
+      sh -c 'go build -o main &&
+      ./main'
 #    command: ["/bin/sh"]
     depends_on:
     - postgresql

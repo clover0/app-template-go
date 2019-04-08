@@ -12,14 +12,14 @@ import (
 
 var dbcon *sqlx.DB
 
-func NewDB() *sqlx.DB {
-	user := config.Conf.DB.User
-	host := config.Conf.DB.Host
-	port := config.Conf.DB.Port
-	password := config.Conf.DB.Password
-	dbName := config.Conf.DB.DbName
-	maxIdleConn := config.Conf.DB.MaxIdleConn
-	maxOpenConn := config.Conf.DB.MaxOpenConn
+func NewDB(config2 config.Config) *sqlx.DB {
+	user := config2.DB.User
+	host := config2.DB.Host
+	port := config2.DB.Port
+	password := config2.DB.Password
+	dbName := config2.DB.DbName
+	maxIdleConn := config2.DB.MaxIdleConn
+	maxOpenConn := config2.DB.MaxOpenConn
 
 	ds := fmt.Sprintf(
 		"user=%s host=%s port=%d password=%s dbname=%s sslmode=disable",
@@ -35,7 +35,7 @@ func NewDB() *sqlx.DB {
 	}
 	db.SetMaxIdleConns(maxIdleConn)
 	db.SetMaxOpenConns(maxOpenConn)
-	log.Printf("database connected: user=%s host=%s port=%d password=*** dbname=%s sslmode=disable maxidle=%s maxopen=%s",
+	log.Printf("database connected: user=%s host=%s port=%d password=*** dbname=%s sslmode=disable maxidle=%d maxopen=%d",
 		user,
 		host,
 		port,

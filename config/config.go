@@ -6,8 +6,6 @@ import (
 	"github.com/BurntSushi/toml"
 )
 
-var Conf Config
-
 // from toml file config.
 type Config struct {
 	DB DataBaseConfig `toml:"database"`
@@ -25,7 +23,7 @@ type DataBaseConfig struct {
 
 // Initialization configuration for project 
 // every environment.
-func InitConfig() {
+func InitConfig() Config {
 	var config Config
 	var configFile string
 	configDir := "config"
@@ -52,5 +50,5 @@ func InitConfig() {
 		os.Getenv("AUTH465_DB_PWD")
 	}
 
-	Conf = config
+	return config
 }
