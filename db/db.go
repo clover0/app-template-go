@@ -12,6 +12,7 @@ import (
 
 var dbcon *sqlx.DB
 
+
 func NewDB(config2 config.Config) *sqlx.DB {
 	user := config2.DB.User
 	host := config2.DB.Host

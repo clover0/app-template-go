@@ -8,16 +8,13 @@ package main
 import (
 	"auth465/config"
 	"auth465/handler/api"
+	"auth465/store"
 )
 
 // Injectors from wire.go:
 
 func InitializeApplication(config2 config.Config) (application, error) {
-	db, err := provideDatabase(config2)
-	if err != nil {
-		return application{}, err
-	}
-	userStore := provideUserStore(db)
+	userStore := users.New()
 	apiApi := api.New(userStore)
 	server := provideServer(config2, apiApi)
 	mainApplication := newApplication(server)

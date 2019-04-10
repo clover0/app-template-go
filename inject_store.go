@@ -2,7 +2,6 @@ package main
 
 import (
 	"auth465/config"
-	"auth465/core"
 	"auth465/db"
 	"auth465/store"
 
@@ -12,13 +11,9 @@ import (
 
 var storeSet = wire.NewSet(
 	provideDatabase,
-	provideUserStore,
+	users.New,
 )
 
 func provideDatabase(config config.Config) (*sqlx.DB, error) {
 	return db.NewDB(config), nil
-}
-
-func provideUserStore(db *sqlx.DB) core.UserStore {
-	return users.New(db)
 }
