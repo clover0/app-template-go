@@ -24,20 +24,25 @@ func (u *userStore) Find(id int64) (*core.User, error) {
 	var user core.User
 	err = row.Scan(&user)
 	if err != nil {
-		err = tx.Commit()
+		tx.Rollback()
+		return nil, err
 	}
-	return &user, err
+
+	return &user, tx.Commit()
 }
 
 func (u *userStore) Create(user *core.User) error {
 	var err error
 	params := toParams(user)
 	tx, err := u.db.Beginx()
+
+	_, err = tx.NamedExec(AddUser, params)
 	if err != nil {
+		tx.Rollback()
 		return err
 	}
-	_, err = tx.NamedExec(AddUser, params)
-	return err
+
+	return tx.Commit()
 }
 
 func toParams(user *core.User) map[string]interface{} {
