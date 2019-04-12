@@ -1,6 +1,7 @@
 package db
 
 import (
+	"auth465/core"
 	"fmt"
 	"log"
 
@@ -50,6 +51,8 @@ func NewDB(config2 config.Config) *sqlx.DB {
 	return db
 }
 
-func GetConnection() *sqlx.DB {
-	return dbcon
+type Session struct {
+	core.StoreSession
+	*sqlx.Tx
 }
+

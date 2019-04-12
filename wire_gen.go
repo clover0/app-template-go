@@ -14,8 +14,13 @@ import (
 // Injectors from wire.go:
 
 func InitializeApplication(config2 config.Config) (application, error) {
-	userStore := users.New()
-	apiApi := api.New(userStore)
+	userStoreFunc := users.New()
+	db, err := provideDatabase(config2)
+	if err != nil {
+		return application{}, err
+	}
+	userService := provideUserService(db, userStoreFunc)
+	apiApi := api.New(userStoreFunc, userService)
 	server := provideServer(config2, apiApi)
 	mainApplication := newApplication(server)
 	return mainApplication, nil

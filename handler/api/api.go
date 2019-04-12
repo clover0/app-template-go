@@ -3,13 +3,16 @@ package api
 import "auth465/core"
 
 func New(
-	userStore core.UserStore,
+	userStoreFunc core.UserStoreFunc,
+	userService core.UserService,
 ) Api {
 	return Api{
-		UserStore: userStore,
+		UserStoreFunc: userStoreFunc,
+		UserService: userService,
 	}
 }
 
 type Api struct {
-	UserStore core.UserStore
+	UserStoreFunc core.UserStoreFunc
+	UserService core.UserService
 }

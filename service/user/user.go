@@ -7,24 +7,24 @@ import (
 )
 
 type userService struct {
-	db        *sqlx.DB
-	userStore core.UserStore
+	db            *sqlx.DB
+	userStoreFunc core.UserStoreFunc
 }
 
-func New(db *sqlx.DB, userStore core.UserStore) core.UserService {
+func New(db *sqlx.DB, userStoreFunc core.UserStoreFunc) core.UserService {
 	return userService{
-		db:        db,
-		userStore: userStore,
+		db:            db,
+		userStoreFunc: userStoreFunc,
 	}
 }
 
 func (service userService) Register(user *core.User) error {
 	//service.userStore.
-	tx,_ := service.db.Beginx()
-	findFn := service.userStore.Find(1)
-	u, _ :=findFn(tx)
-	print(u)
-	
+	tx, _ := service.db.Beginx()
+	userStore := service.userStoreFunc(tx)
+	user, err := userStore.Find(1)
+	print(err)
+
 	tx.Commit()
 	return errors.New("TODO!")
 }
