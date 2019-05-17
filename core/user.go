@@ -1,8 +1,12 @@
 package core
 
+import (
+	"github.com/jmoiron/sqlx"
+)
+
 type (
 	User struct {
-		ID        int64
+		ID        uint64
 		UpdatedAt string
 		CreatedAt string
 		Email     string
@@ -10,10 +14,11 @@ type (
 	}
 	UserStore interface {
 		Find(int64) (*User, error)
-		//Create(user *User) error
+		Create(user *User) (uint64, error)
 	}
 
-	UserStoreFunc func(session StoreSession) UserStore
+	// improve
+	UserStoreFunc func(session *sqlx.Tx) UserStore
 
 	UserService interface {
 		Register(user *User) error

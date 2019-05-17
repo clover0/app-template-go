@@ -2,17 +2,14 @@ package db
 
 import (
 	"auth465/core"
+	"auth465/config"
+
 	"fmt"
 	"log"
-
-	"auth465/config"
 
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 )
-
-var dbcon *sqlx.DB
-
 
 func NewDB(config2 config.Config) *sqlx.DB {
 	user := config2.DB.User
@@ -46,8 +43,6 @@ func NewDB(config2 config.Config) *sqlx.DB {
 		maxOpenConn,
 	)
 
-	dbcon = db
-
 	return db
 }
 
@@ -55,4 +50,3 @@ type Session struct {
 	core.StoreSession
 	*sqlx.Tx
 }
-

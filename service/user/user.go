@@ -3,7 +3,9 @@ package user
 import (
 	"auth465/core"
 	"errors"
+
 	"github.com/jmoiron/sqlx"
+	"github.com/labstack/gommon/log"
 )
 
 type userService struct {
@@ -19,11 +21,14 @@ func New(db *sqlx.DB, userStoreFunc core.UserStoreFunc) core.UserService {
 }
 
 func (service userService) Register(user *core.User) error {
-	//service.userStore.
 	tx, _ := service.db.Beginx()
 	userStore := service.userStoreFunc(tx)
-	user, err := userStore.Find(1)
-	print(err)
+	userId, err := userStore.Create(user)
+	if err != nil {
+		log.Error("cannot create user")
+		return err
+	}
+	log.Info("create user", userId)
 
 	tx.Commit()
 	return errors.New("TODO!")

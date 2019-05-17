@@ -8,7 +8,7 @@ import (
 	"github.com/google/wire"
 )
 
-func InitializeApplication(config config.Config) (application, error){
+func InitializeApplication(config config.Config) (application, error) {
 	wire.Build(
 		storeSet,
 		serviceSet,

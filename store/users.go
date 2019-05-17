@@ -2,19 +2,23 @@ package users
 
 import (
 	"auth465/core"
-	"auth465/db"
+
+	"crypto/rand"
+	"encoding/binary"
+
+	"github.com/jmoiron/sqlx"
 )
 
 func New() core.UserStoreFunc {
-	return func(session core.StoreSession) core.UserStore {
+	return func(session *sqlx.Tx) core.UserStore {
 		return &userStore{
-			sess: session.(db.Session),
+			sess: session,
 		}
 	}
 }
 
 type userStore struct {
-	sess db.Session
+	sess *sqlx.Tx
 }
 
 func (u *userStore) Find(id int64) (*core.User, error) {
@@ -29,21 +33,20 @@ func (u *userStore) Find(id int64) (*core.User, error) {
 	return &user, nil
 }
 
-//func (u *userStore) Create(user *core.User) error {
-//	var err error
-//	params := toParams(user)
-//	tx, err := u.db.Beginx()
-//
-//	_, err = tx.NamedExec(AddUser, params)
-//	if err != nil {
-//		tx.Rollback()
-//		return err
-//	}
-//
-//	return tx.Commit()
-//}
+func (u *userStore) Create(user *core.User) (uint64, error) {
+	var err error
+	user.ID = generateUserId()
+	params := toCreateParams(user)
+	_, err = u.sess.NamedExec(AddUser, params)
+	if err != nil {
+		u.sess.Rollback()
+		return 0, err
+	}
 
-func toParams(user *core.User) map[string]interface{} {
+	return user.ID, u.sess.Commit()
+}
+
+func toCreateParams(user *core.User) map[string]interface{} {
 	return map[string]interface{}{
 		"id":         user.ID,
 		"updated_at": user.UpdatedAt,
@@ -51,6 +54,14 @@ func toParams(user *core.User) map[string]interface{} {
 		"email":      user.Email,
 		"password":   user.Password,
 	}
+}
+
+func generateUserId() uint64 {
+	bs := make([]byte, 128)
+	if _, err := rand.Read(bs); err != nil {
+		panic("")
+	}
+	return binary.BigEndian.Uint64(bs)
 }
 
 const FindUser = "SELECT * FROM users WHERE id = ?"
