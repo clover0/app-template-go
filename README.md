@@ -3,7 +3,12 @@
 * web framework: echo,
 * ORM(sql):sqlx, http://jmoiron.github.io/sqlx/
 
-## develop
+
+
+## Develop
+* DI code gen
+`wire`  
+
 * run app  
 `docker-compose up`
 
@@ -14,8 +19,8 @@
 `docker-compose down`  
 Delete database, session store!
 
-## setup
-### database
+## Setup
+### Database
 * create databse  
 `docker exec -it postgresql_auth465 psql -f /home/db/migration/sql/0.sql -U postgres`
 
