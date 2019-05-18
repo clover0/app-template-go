@@ -14,6 +14,7 @@ type (
 	}
 
 	UserStore interface {
+		Count(column string, param interface{}) (uint, error)
 		Find(uint32) (*User, error)
 		Create(user *User) (uint32, error)
 	}
@@ -22,6 +23,7 @@ type (
 	UserStoreFunc func(session *sqlx.Tx) UserStore
 
 	UserService interface {
+		CheckDuplicateEmail(user *User) (bool,error)
 		Register(user *User) error
 	}
 )

@@ -24,11 +24,20 @@ func CreateUserHandler(service core.UserService) func(c echo.Context) (err error
 		user := new(core.User)
 		user.Email = form.Email
 		user.Password = form.Password
+		res, err := service.CheckDuplicateEmail(user)
+		if err != nil {
+			log.Error(err)
+			return c.JSON(http.StatusInternalServerError, "error")
+		}
+		if !res {
+			return c.JSON(http.StatusBadRequest, "bad request")
+		}
+
 		if err := service.Register(user); err != nil {
 			log.Error(err)
 			return c.JSON(http.StatusInternalServerError, "error")
 		}
-		
+
 		return c.JSON(http.StatusOK, 1)
 	}
 }
