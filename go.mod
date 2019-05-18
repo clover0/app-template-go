@@ -2,6 +2,7 @@ module auth465
 
 require (
 	github.com/BurntSushi/toml v0.3.1
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/google/wire v0.2.1
 	github.com/jmoiron/sqlx v1.2.0
 	github.com/labstack/echo v3.3.10+incompatible

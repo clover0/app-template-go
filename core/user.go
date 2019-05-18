@@ -6,15 +6,16 @@ import (
 
 type (
 	User struct {
-		ID        uint64
+		ID        uint32
 		UpdatedAt string
 		CreatedAt string
 		Email     string
 		Password  string
 	}
+
 	UserStore interface {
-		Find(int64) (*User, error)
-		Create(user *User) (uint64, error)
+		Find(uint32) (*User, error)
+		Create(user *User) (uint32, error)
 	}
 
 	// improve

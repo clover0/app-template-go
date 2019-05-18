@@ -1,17 +1,39 @@
 package handler
 
 import (
-	"github.com/labstack/echo"
+	"auth465/core"
+
 	"net/http"
+
+	"github.com/labstack/echo"
+	"github.com/labstack/gommon/log"
 )
 
-func CreateUserHandler(c echo.Context)(err error) {
-	
-	return c.JSON(http.StatusOK, 1)
+type UserCreateForm struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
 }
 
-func UpdateUserHandler(c echo.Context)(err error){
+func CreateUserHandler(service core.UserService) func(c echo.Context) (err error) {
+	return func(c echo.Context) (err error) {
+		form := new(UserCreateForm)
+		if err := c.Bind(form); err != nil {
+			return err
+		}
+
+		user := new(core.User)
+		user.Email = form.Email
+		user.Password = form.Password
+		if err := service.Register(user); err != nil {
+			log.Error(err)
+			return c.JSON(http.StatusInternalServerError, "error")
+		}
+		
+		return c.JSON(http.StatusOK, 1)
+	}
+}
+
+func UpdateUserHandler(c echo.Context) (err error) {
 
 	return c.JSON(http.StatusOK, 1)
 }
-

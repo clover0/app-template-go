@@ -50,3 +50,23 @@ type Session struct {
 	core.StoreSession
 	*sqlx.Tx
 }
+
+func Transact(db *sqlx.DB, txFunc func(*sqlx.Tx) error) (err error) {
+	tx, err := db.Beginx()
+	if err != nil {
+		return
+	}
+	defer func() {
+		if p := recover(); p != nil {
+			tx.Rollback()
+			panic(p)
+		} else if err != nil {
+			tx.Rollback()
+		} else {
+			err = tx.Commit()
+		}
+	}()
+	err = txFunc(tx)
+	return err
+}
+
