@@ -2,8 +2,7 @@
 * Go version 1.11
 * web framework: echo,
 * ORM(sql):sqlx, http://jmoiron.github.io/sqlx/
-
-
+* SessionStore: Redis
 
 ## Develop
 * DI code gen
@@ -25,4 +24,12 @@ Delete database, session store!
 `docker exec -it postgresql_auth465 psql -f /home/db/migration/sql/0.sql -U postgres`
 
 * execute migrate
-docker exec -it postgresql_auth465 psql -f /home/db/migration/sql/ファイル名 -U postgres -d auth465
+docker exec -it postgresql_auth465 psql -f /home/db/migration/sql/<FILE_NAME> -U postgres -d auth465
+
+
+## Testing
+* set up database  
+`docker exec -it postgresql_auth465 psql -f /home/db/migration/sql/<FILE_NAME> -U postgres -d auth465_test`
+
+* run all test   
+`docker exec -it auth465 go test -v ./...`  

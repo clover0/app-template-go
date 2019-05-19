@@ -15,6 +15,6 @@ require (
 	github.com/onsi/gomega v1.5.0 // indirect
 	github.com/stretchr/testify v1.3.0 // indirect
 	github.com/valyala/fasttemplate v1.0.1 // indirect
-	golang.org/x/crypto v0.0.0-20190313024323-a1f597ede03a // indirect
+	golang.org/x/crypto v0.0.0-20190313024323-a1f597ede03a
 	google.golang.org/appengine v1.6.0 // indirect
 )
