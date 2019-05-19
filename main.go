@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	conf := config.InitConfig()
+	conf := config.InitConfig("")
 	app, err := InitializeApplication(conf)
 	if err != nil {
 		log.Fatal("main: cannot initialize application")

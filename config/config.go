@@ -29,14 +29,17 @@ type SessionStoreConfig struct {
 
 // Initialization configuration for project 
 // every environment.
-func InitConfig() Config {
+func InitConfig(baseDir string) Config {
 	var config Config
 	var configFile string
-	configDir := "config"
-
+	if baseDir == "" {
+		baseDir = "config"
+	}
 	switch os.Getenv("AUTH465_ENV") {
 	case "local":
 		configFile = "config.local.toml"
+	case "test":
+		configFile = "config.test.toml"
 	case "development":
 		configFile = "config.development.toml"
 	case "staging":
@@ -47,7 +50,7 @@ func InitConfig() Config {
 		configFile = "config.local.toml"
 	}
 
-	_, err := toml.DecodeFile(configDir+"/"+configFile, &config)
+	_, err := toml.DecodeFile(baseDir+"/"+configFile, &config)
 	if err != nil {
 		log.Fatal(err)
 	}

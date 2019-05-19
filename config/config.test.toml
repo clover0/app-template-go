@@ -1,0 +1,16 @@
+title = "configuration for test environment"
+
+[database]
+host = "postgresql_auth465" # docker network
+port = 5432
+user = "postgres"
+password = "password" # dont write! on production,staging environment. 
+dbName = "auth465_test"
+maxIdleConn = 1
+MaxOpenConn = 1
+
+[session]
+addr = "redis_auth465:6379"
+db = 0
+
+ 
