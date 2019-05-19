@@ -8,7 +8,6 @@ import (
 
 	"github.com/labstack/echo"
 	"github.com/labstack/gommon/log"
-	"github.com/go-redis/redis"
 )
 
 type UserCreateForm struct {
@@ -16,7 +15,7 @@ type UserCreateForm struct {
 	Password string `json:"password"`
 }
 
-func CreateUserHandler(service core.UserService, session *redis.Client) func(c echo.Context) (err error) {
+func CreateUserHandler(service core.UserService) func(c echo.Context) (err error) {
 	return func(c echo.Context) (err error) {
 		//cookie, err := c.Cookie("ESESSION")
 		//if err != nil {
@@ -45,12 +44,12 @@ func CreateUserHandler(service core.UserService, session *redis.Client) func(c e
 			return c.JSON(http.StatusInternalServerError, "error")
 		}
 		user.Password = string(password)
-		res, err := service.CheckDuplicateEmail(user)
+		ok, err := service.CheckDuplicateEmail(user)
 		if err != nil {
 			log.Error(err)
 			return c.JSON(http.StatusInternalServerError, "error")
 		}
-		if !res {
+		if !ok {
 			return c.JSON(http.StatusBadRequest, "bad request")
 		}
 
@@ -59,7 +58,7 @@ func CreateUserHandler(service core.UserService, session *redis.Client) func(c e
 			return c.JSON(http.StatusInternalServerError, "error")
 		}
 
-		return c.JSON(http.StatusOK, 1)
+		return c.JSON(http.StatusCreated, 1)
 	}
 }
 

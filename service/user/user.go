@@ -19,6 +19,7 @@ func New(db *sqlx.DB, userStoreFunc core.UserStoreFunc) core.UserService {
 	}
 }
 
+// CheckDuplicateEmail returns true if not duplicate email
 func (service userService) CheckDuplicateEmail(user *core.User) (bool, error) {
 	var res bool
 	err := db.Transact(service.db, func(tx *sqlx.Tx) error {
