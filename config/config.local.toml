@@ -9,4 +9,8 @@ dbName = "auth465"
 maxIdleConn = 1
 MaxOpenConn = 1
 
+[session]
+addr = "redis_auth465:6379"
+db = 0
+
  

@@ -8,17 +8,23 @@ import (
 
 // from toml file config.
 type Config struct {
-	DB DataBaseConfig `toml:"database"`
+	DB      DataBaseConfig     `toml:"database"`
+	Session SessionStoreConfig `toml:"session"`
 }
 
 type DataBaseConfig struct {
-	Host     string `toml:"host"`
-	Port     int    `toml:"port"`
-	User     string `toml:"user"`
-	Password string `toml:"password"`
-	DbName   string `toml:"dbName"`
-	MaxIdleConn int `toml:"maxIdleConn"`
-	MaxOpenConn int `toml:"maxOpenConn"`
+	Host        string `toml:"host"`
+	Port        int    `toml:"port"`
+	User        string `toml:"user"`
+	Password    string `toml:"password"`
+	DbName      string `toml:"dbName"`
+	MaxIdleConn int    `toml:"maxIdleConn"`
+	MaxOpenConn int    `toml:"maxOpenConn"`
+}
+
+type SessionStoreConfig struct {
+	Addr string `toml:"addr"`
+	DB   int    `toml:"db"`
 }
 
 // Initialization configuration for project 
