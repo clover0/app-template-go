@@ -7,6 +7,7 @@ import (
 
 	"github.com/labstack/echo"
 	"github.com/labstack/gommon/log"
+	"github.com/go-redis/redis"
 )
 
 type UserCreateForm struct {
@@ -14,7 +15,7 @@ type UserCreateForm struct {
 	Password string `json:"password"`
 }
 
-func CreateUserHandler(service core.UserService) func(c echo.Context) (err error) {
+func CreateUserHandler(service core.UserService, session *redis.Client) func(c echo.Context) (err error) {
 	return func(c echo.Context) (err error) {
 		form := new(UserCreateForm)
 		if err := c.Bind(form); err != nil {

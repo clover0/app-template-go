@@ -14,7 +14,7 @@ func Init(e *echo.Echo, s *server.Server)  {
 		return c.String(http.StatusOK, "Hello, World!")
 	})
 	e.POST("/a/user/create",
-		handler.CreateUserHandler(s.Api.UserService),
+		handler.CreateUserHandler(s.Api.UserService, s.SessionStore),
 	)
 	//e.POST("/a/u/u", handler.CreateUserHandler)
 	//e.POST("/a/s/c", handler.CreateUserHandler)

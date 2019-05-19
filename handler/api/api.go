@@ -5,8 +5,8 @@ import "auth465/core"
 func New(
 	userStoreFunc core.UserStoreFunc,
 	userService core.UserService,
-) Api {
-	return Api{
+) *Api {
+	return &Api{
 		UserStoreFunc: userStoreFunc,
 		UserService: userService,
 	}

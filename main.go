@@ -23,6 +23,7 @@ func main() {
 	//e.GET("/", func(c echo.Context) error {
 	//	return c.String(http.StatusOK, "Hello, World!")
 	//})
+	// TODO: include initApp
 	router.Init(e, app.server)
 	e.Logger.Fatal(e.Start(":1323"))
 }

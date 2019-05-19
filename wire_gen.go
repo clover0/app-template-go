@@ -21,7 +21,11 @@ func InitializeApplication(config2 config.Config) (application, error) {
 	}
 	userService := provideUserService(db, userStoreFunc)
 	apiApi := api.New(userStoreFunc, userService)
-	server := provideServer(config2, apiApi)
+	client, err := provideSession(config2)
+	if err != nil {
+		return application{}, err
+	}
+	server := provideServer(config2, apiApi, client)
 	mainApplication := newApplication(server)
 	return mainApplication, nil
 }
