@@ -26,7 +26,6 @@ func testUserStore_CreateSuccess(t *testing.T) {
 		Email:    "test" + fmt.Sprint(testutils.GenerateRandomNum()),
 		Password: "test_password",
 	}
-	fmt.Println(dbtest.GetCon())
 	err := db.Transact(dbtest.GetCon(), func(tx *sqlx.Tx) error {
 		res, err := userStoreFn(tx).Create(user)
 		if res == 0 || err != nil {
@@ -50,7 +49,6 @@ func testUserStore_CountsSuccess(t *testing.T) {
 		Email:    "test" + fmt.Sprint(testutils.GenerateRandomNum()),
 		Password: "test_password" + fmt.Sprint(num),
 	}
-	fmt.Println(dbtest.GetCon())
 	err := db.Transact(dbtest.GetCon(), func(tx *sqlx.Tx) error {
 		res, err := userStoreFn(tx).Create(user1)
 		if res == 0 || err != nil {
