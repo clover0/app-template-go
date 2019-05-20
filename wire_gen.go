@@ -20,7 +20,8 @@ func InitializeApplication(config2 config.Config) (application, error) {
 		return application{}, err
 	}
 	userService := provideUserService(db, userStoreFunc)
-	apiApi := api.New(userStoreFunc, userService)
+	sessionService := provideSessionService(db, userStoreFunc)
+	apiApi := api.New(userStoreFunc, userService, sessionService)
 	client, err := provideSession(config2)
 	if err != nil {
 		return application{}, err

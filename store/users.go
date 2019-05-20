@@ -2,7 +2,6 @@ package users
 
 import (
 	"auth465/core"
-
 	"crypto/rand"
 	"encoding/binary"
 	"time"
@@ -27,6 +26,15 @@ func (u *userStore) Find(id uint32) (*core.User, error) {
 	row := u.sess.QueryRow(FindUser, id)
 	var user core.User
 	err = row.Scan(&user)
+	if err != nil {
+		return nil, err
+	}
+	return &user, nil
+}
+
+func (u *userStore) FindByEmail(email string) (*core.User, error) {
+	var user core.User
+	err := u.sess.QueryRowx(FindUserByEmail, email).StructScan(&user)
 	if err != nil {
 		return nil, err
 	}
@@ -88,7 +96,8 @@ func countByColumnNameStmt(column string) string {
 	return "SELECT count(*) FROM users WHERE " + column + " = $1"
 }
 
-const FindUser = "SELECT * FROM users WHERE id = ?"
+const FindUser = "SELECT * FROM users WHERE id = $1"
+const FindUserByEmail = "SELECT * FROM users WHERE email = $1"
 
 const AddUser = `
 INSERT INTO users (
