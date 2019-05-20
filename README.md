@@ -18,6 +18,13 @@
 `docker-compose down`  
 Delete database, session store!
 
+* do sign_in  
+`curl -X POST -H "Content-Type: application/json" -d '{"email":"<Email!>", "password":"<Password!>"}' http://localhost:1323/a/auth -c cookie.txt`  
+
+* do sign_out  
+`curl -X POST -b cookie.txt http://localhost:1323/a/sign_out -c cookie.txt`  
+
+
 ## Setup
 ### Database
 * create databse  

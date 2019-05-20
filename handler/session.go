@@ -44,6 +44,7 @@ func CreateSessionHandler(service core.SessionService, session *redis.Client) fu
 				cookie.Name = "ESESSION"
 				cookie.Value = sessionId
 				cookie.Expires = time.Now().Add(14 * 24 * time.Hour)
+				cookie.Path = "/"
 				c.SetCookie(cookie)
 				return c.JSON(http.StatusCreated, 1)
 			} else { // exists user but password no match
@@ -52,6 +53,19 @@ func CreateSessionHandler(service core.SessionService, session *redis.Client) fu
 		} else { // not exists
 			return c.JSON(http.StatusBadRequest, "email no match")
 		}
+	}
+}
+
+func DeleteSessionHandler(session *redis.Client) func(c echo.Context) (err error) {
+	return func(c echo.Context) (err error) {
+		cookie, err := c.Cookie("ESESSION")
+		if err == http.ErrNoCookie {
+			return c.JSON(http.StatusOK, "no cookie")
+		} else if err != nil {
+			return c.JSON(http.StatusInternalServerError, "can not read cookie")
+		}
+		session.Del(cookie.Value)
+		return c.JSON(http.StatusOK, "ok")
 	}
 }
 

@@ -3,8 +3,8 @@ package handler
 import (
 	"auth465/core"
 	"auth465/testutils"
-	"fmt"
 
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"strings"
