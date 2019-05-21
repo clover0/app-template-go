@@ -21,6 +21,7 @@ type userStore struct {
 	sess *sqlx.Tx
 }
 
+// Find finds user from users table by id(PK)
 func (u *userStore) Find(id uint32) (*core.User, error) {
 	var user core.User
 	err := u.sess.QueryRowx(FindUser, id).StructScan(&user)
@@ -30,6 +31,7 @@ func (u *userStore) Find(id uint32) (*core.User, error) {
 	return &user, nil
 }
 
+// FindByEmail finds user from users table by email(UK)
 func (u *userStore) FindByEmail(email string) (*core.User, error) {
 	var user core.User
 	err := u.sess.QueryRowx(FindUserByEmail, email).StructScan(&user)

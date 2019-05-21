@@ -1,7 +1,6 @@
 package db
 
 import (
-	"auth465/core"
 	"auth465/config"
 
 	"fmt"
@@ -44,11 +43,6 @@ func NewDB(config2 config.Config) *sqlx.DB {
 	)
 
 	return db
-}
-
-type Session struct {
-	core.StoreSession
-	*sqlx.Tx
 }
 
 func Transact(db *sqlx.DB, txFunc func(*sqlx.Tx) error) (err error) {

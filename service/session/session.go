@@ -3,6 +3,7 @@ package session
 import (
 	"auth465/core"
 	"auth465/db"
+
 	"github.com/jmoiron/sqlx"
 )
 
@@ -18,6 +19,7 @@ func New(db *sqlx.DB, userStoreFunc core.UserStoreFunc) core.SessionService {
 	}
 }
 
+// FindUserByEmail finds user by email and return user with transaction
 func (service sessionService) FindUserByEmail(email string) (*core.User, error) {
 	var user *core.User
 	err := db.Transact(service.db, func(tx *sqlx.Tx) error {
@@ -32,6 +34,7 @@ func (service sessionService) FindUserByEmail(email string) (*core.User, error) 
 	return user, err
 }
 
+// FindUserById finds user by id and return user with transaction
 func (service sessionService) FindUserById(id uint32) (*core.User, error) {
 	var user *core.User
 	err := db.Transact(service.db, func(tx *sqlx.Tx) error {

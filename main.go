@@ -20,9 +20,6 @@ func main() {
 	e := echo.New()
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
-	//e.GET("/", func(c echo.Context) error {
-	//	return c.String(http.StatusOK, "Hello, World!")
-	//})
 	// TODO: include initApp
 	router.Init(e, app.server)
 	e.Logger.Fatal(e.Start(":1323"))

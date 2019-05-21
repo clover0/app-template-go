@@ -2,7 +2,7 @@ package main
 
 import (
 	"auth465/config"
-	"auth465/handler/api"
+	"auth465/server/api"
 	"auth465/server"
 	
 	"github.com/go-redis/redis"

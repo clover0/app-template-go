@@ -17,7 +17,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type SessionCreateForm struct {
+type sessionCreateForm struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
 }
@@ -26,7 +26,7 @@ func CreateSessionHandler(service core.SessionService, session *redis.Client) fu
 	return func(c echo.Context) (err error) {
 
 		// bind form from request
-		form := new(UserCreateForm)
+		form := new(sessionCreateForm)
 		if err := c.Bind(form); err != nil {
 			return err
 		}

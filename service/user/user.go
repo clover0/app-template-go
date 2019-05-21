@@ -3,6 +3,7 @@ package user
 import (
 	"auth465/core"
 	"auth465/db"
+
 	"github.com/jmoiron/sqlx"
 	"github.com/labstack/gommon/log"
 )
@@ -20,6 +21,7 @@ func New(db *sqlx.DB, userStoreFunc core.UserStoreFunc) core.UserService {
 }
 
 // CheckDuplicateEmail returns true if not duplicate email
+// with transaction
 func (service userService) CheckDuplicateEmail(user *core.User) (bool, error) {
 	var res bool
 	err := db.Transact(service.db, func(tx *sqlx.Tx) error {
@@ -43,6 +45,7 @@ func (service userService) CheckDuplicateEmail(user *core.User) (bool, error) {
 	return res, err
 }
 
+// Register registers user with transaction
 func (service userService) Register(user *core.User) error {
 	return db.Transact(service.db, func(tx *sqlx.Tx) error {
 		userStore := service.userStoreFunc(tx)

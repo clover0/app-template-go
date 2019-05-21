@@ -1,7 +1,7 @@
 package server
 
 import (
-	"auth465/handler/api"
+	"auth465/server/api"
 
 	"github.com/go-redis/redis"
 )
