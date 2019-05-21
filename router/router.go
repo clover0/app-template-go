@@ -9,7 +9,7 @@ import (
 	"github.com/labstack/echo"
 )
 
-func Init(e *echo.Echo, s *server.Server)  {
+func Init(e *echo.Echo, s *server.Server) {
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Hello, World!")
 	})
@@ -21,5 +21,8 @@ func Init(e *echo.Echo, s *server.Server)  {
 	)
 	e.POST("/a/sign_out",
 		handler.DeleteSessionHandler(s.SessionStore),
+	)
+	e.POST("/d/auth/current",
+		handler.ShowCurrentSessionHandler(s.Api.SessionService, s.SessionStore),
 	)
 }

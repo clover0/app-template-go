@@ -2,17 +2,19 @@ package handler
 
 import (
 	"auth465/core"
+	"fmt"
 
-	"github.com/go-redis/redis"
-	"github.com/labstack/echo"
-	"github.com/labstack/gommon/log"
-	"golang.org/x/crypto/bcrypt"
-
+	"strconv"
 	"crypto/rand"
 	"encoding/base64"
 	"io"
 	"net/http"
 	"time"
+
+	"github.com/go-redis/redis"
+	"github.com/labstack/echo"
+	"github.com/labstack/gommon/log"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type SessionCreateForm struct {
@@ -66,6 +68,38 @@ func DeleteSessionHandler(session *redis.Client) func(c echo.Context) (err error
 		}
 		session.Del(cookie.Value)
 		return c.JSON(http.StatusOK, "ok")
+	}
+}
+
+func ShowCurrentSessionHandler(service core.SessionService, session *redis.Client) func(c echo.Context) (err error) {
+	return func(c echo.Context) (err error) {
+		cookie, err := c.Cookie("ESESSION")
+		if err == http.ErrNoCookie {
+			return c.JSON(http.StatusOK, "no sign in")
+		} else if err != nil {
+			return c.JSON(http.StatusInternalServerError, "can not read cookie")
+		}
+		userId, err := session.Get(cookie.Value).Result()
+		if err == redis.Nil {
+			return c.JSON(http.StatusOK, "no sign in")
+		} else if err != nil {
+			log.Error(err)
+			panic(err)
+		}
+		log.Info(userId)
+		id, err := strconv.ParseUint(userId, 10, 32)
+		if err != nil {
+			log.Error(err)
+			panic(err)
+		}
+		user, err := service.FindUserById(uint32(id))
+		log.Info(id)
+		log.Info(uint32(id))
+		if user == nil {
+			return c.JSON(http.StatusInternalServerError, "error")
+		}
+
+		return c.JSON(http.StatusOK, fmt.Sprintf("already sign in! Your email is %s", user.Email))
 	}
 }
 

@@ -31,3 +31,17 @@ func (service sessionService) FindUserByEmail(email string) (*core.User, error) 
 	})
 	return user, err
 }
+
+func (service sessionService) FindUserById(id uint32) (*core.User, error) {
+	var user *core.User
+	err := db.Transact(service.db, func(tx *sqlx.Tx) error {
+		var err error
+		userStore := service.userStoreFunc(tx)
+		user, err = userStore.Find(id)
+		if err != nil {
+			return err
+		}
+		return nil
+	})
+	return user, err
+}

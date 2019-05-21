@@ -22,10 +22,8 @@ type userStore struct {
 }
 
 func (u *userStore) Find(id uint32) (*core.User, error) {
-	var err error
-	row := u.sess.QueryRow(FindUser, id)
 	var user core.User
-	err = row.Scan(&user)
+	err := u.sess.QueryRowx(FindUser, id).StructScan(&user)
 	if err != nil {
 		return nil, err
 	}
