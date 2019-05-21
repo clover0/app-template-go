@@ -17,7 +17,7 @@ func Init(e *echo.Echo, s *server.Server) {
 		handler.CreateUserHandler(s.Api.UserService),
 	)
 	e.POST("/a/auth",
-		handler.CreateSessionHandler(s.Api.SessionService, s.SessionStore),
+		handler.CreateSessionHandler(s.Api.SessionService),
 	)
 	e.POST("/a/sign_out",
 		handler.DeleteSessionHandler(s.SessionStore),

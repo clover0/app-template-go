@@ -4,25 +4,23 @@ import (
 	"auth465/core"
 	"fmt"
 
-	"strconv"
-	"crypto/rand"
-	"encoding/base64"
-	"io"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/go-redis/redis"
 	"github.com/labstack/echo"
 	"github.com/labstack/gommon/log"
-	"golang.org/x/crypto/bcrypt"
 )
+
+const cookieSessionName = "ESESSION"
 
 type sessionCreateForm struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
 }
 
-func CreateSessionHandler(service core.SessionService, session *redis.Client) func(c echo.Context) (err error) {
+func CreateSessionHandler(service core.SessionService) func(c echo.Context) (err error) {
 	return func(c echo.Context) (err error) {
 
 		// bind form from request
@@ -39,11 +37,14 @@ func CreateSessionHandler(service core.SessionService, session *redis.Client) fu
 		}
 		// exists user?
 		if user != nil {
-			if bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(form.Password)) == nil {
-				sessionId := generateSessionId()
-				session.Set(sessionId, user.ID, 1*time.Hour)
+			if service.ComparePassword(user, form.Password) == nil {
+				sessionId, err := service.CreateSession(user.ID)
+				if err != nil {
+					log.Error(err)
+					panic(err)
+				}
 				cookie := new(http.Cookie)
-				cookie.Name = "ESESSION"
+				cookie.Name = cookieSessionName
 				cookie.Value = sessionId
 				cookie.Expires = time.Now().Add(14 * 24 * time.Hour)
 				cookie.Path = "/"
@@ -60,7 +61,7 @@ func CreateSessionHandler(service core.SessionService, session *redis.Client) fu
 
 func DeleteSessionHandler(session *redis.Client) func(c echo.Context) (err error) {
 	return func(c echo.Context) (err error) {
-		cookie, err := c.Cookie("ESESSION")
+		cookie, err := c.Cookie(cookieSessionName)
 		if err == http.ErrNoCookie {
 			return c.JSON(http.StatusOK, "no cookie")
 		} else if err != nil {
@@ -73,7 +74,7 @@ func DeleteSessionHandler(session *redis.Client) func(c echo.Context) (err error
 
 func ShowCurrentSessionHandler(service core.SessionService, session *redis.Client) func(c echo.Context) (err error) {
 	return func(c echo.Context) (err error) {
-		cookie, err := c.Cookie("ESESSION")
+		cookie, err := c.Cookie(cookieSessionName)
 		if err == http.ErrNoCookie {
 			return c.JSON(http.StatusOK, "no sign in")
 		} else if err != nil {
@@ -103,11 +104,3 @@ func ShowCurrentSessionHandler(service core.SessionService, session *redis.Clien
 	}
 }
 
-func generateSessionId() string {
-	b := make([]byte, 32)
-	if _, err := io.ReadFull(rand.Reader, b); err != nil {
-		log.Error("can not generate sessionId")
-		return ""
-	}
-	return base64.URLEncoding.EncodeToString(b)
-}

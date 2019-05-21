@@ -5,6 +5,7 @@ import (
 	"auth465/service/session"
 	"auth465/service/user"
 
+	"github.com/go-redis/redis"
 	"github.com/google/wire"
 	"github.com/jmoiron/sqlx"
 )
@@ -18,7 +19,7 @@ func provideUserService(db *sqlx.DB, userStoreFunc core.UserStoreFunc) core.User
 	return user.New(db, userStoreFunc)
 }
 
-func provideSessionService(db *sqlx.DB, userStoreFunc core.UserStoreFunc) core.SessionService {
-	return session.New(db, userStoreFunc)
+func provideSessionService(db *sqlx.DB, s *redis.Client, userStoreFunc core.UserStoreFunc) core.SessionService {
+	return session.New(db, s, userStoreFunc)
 }
 
