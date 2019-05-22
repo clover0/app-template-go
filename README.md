@@ -1,10 +1,15 @@
-# README
-* Go version 1.11
-* web framework: echo,
-* ORM(sql):sqlx, http://jmoiron.github.io/sqlx/
-* SessionStore: Redis
+# Auth-Server-Template
+Auth-Server-Template is a template to build authentication server quickly with Go.
+This project shows you how to make it by DI with Go, the mechanism of authentication, 
+and the architecture of the web application.
 
-## Develop
+# Env
+* Go version 1.11
+* web framework: Echo,
+* ORM(sql):sqlx, http://jmoiron.github.io/sqlx/
+* SessionStore: Redis4.0
+
+## For Developer
 * DI code gen
 `wire`  
 
@@ -16,7 +21,9 @@
 
 * reset containers  
 `docker-compose down`  
-Delete database, session store!
+This command deletes database and session store!
+
+### check api
 
 * do sign_in  
 `curl -X POST -H "Content-Type: application/json" -d '{"email":"<Email!>", "password":"<Password!>"}' http://localhost:1323/a/auth -c cookie.txt`  
@@ -25,16 +32,16 @@ Delete database, session store!
 `curl -X POST -b cookie.txt http://localhost:1323/a/sign_out -c cookie.txt`  
 
 
-## Setup
+## How to Setup
 ### Database
 * create databse  
 `docker exec -it postgresql_auth465 psql -f /home/db/migration/sql/0.sql -U postgres`
 
 * execute migrate
-docker exec -it postgresql_auth465 psql -f /home/db/migration/sql/<FILE_NAME> -U postgres -d auth465
+`docker exec -it postgresql_auth465 psql -f /home/db/migration/sql/<FILE_NAME> -U postgres -d auth465`
 
 
-## Testing
+## For Testing
 * set up database  
 `docker exec -it postgresql_auth465 psql -f /home/db/migration/sql/<FILE_NAME> -U postgres -d auth465_test`
 
