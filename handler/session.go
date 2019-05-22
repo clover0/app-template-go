@@ -72,7 +72,7 @@ func DeleteSessionHandler(session *redis.Client) func(c echo.Context) (err error
 	}
 }
 
-func ShowCurrentSessionHandler(service core.SessionService, session *redis.Client) func(c echo.Context) (err error) {
+func ShowCurrentSessionHandler(service core.SessionService) func(c echo.Context) (err error) {
 	return func(c echo.Context) (err error) {
 		cookie, err := c.Cookie(cookieSessionName)
 		if err == http.ErrNoCookie {
@@ -80,23 +80,21 @@ func ShowCurrentSessionHandler(service core.SessionService, session *redis.Clien
 		} else if err != nil {
 			return c.JSON(http.StatusInternalServerError, "can not read cookie")
 		}
-		userId, err := session.Get(cookie.Value).Result()
+		userId, err := service.GetSession(cookie.Value)
 		if err == redis.Nil {
 			return c.JSON(http.StatusOK, "no sign in")
 		} else if err != nil {
 			log.Error(err)
 			panic(err)
 		}
-		log.Info(userId)
 		id, err := strconv.ParseUint(userId, 10, 32)
 		if err != nil {
 			log.Error(err)
 			panic(err)
 		}
 		user, err := service.FindUserById(uint32(id))
-		log.Info(id)
-		log.Info(uint32(id))
 		if user == nil {
+			log.Error(err)
 			return c.JSON(http.StatusInternalServerError, "error")
 		}
 

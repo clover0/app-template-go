@@ -20,6 +20,10 @@ func (service sessionServiceMock) CreateSession(userId uint32) (string, error) {
 	return "xxxxxx", nil
 }
 
+func (service sessionServiceMock) GetSession(key string) (string, error) {
+	return "session token", nil
+}
+
 // FindUserByEmail finds user by email and return user with transaction
 func (service sessionServiceMock) FindUserByEmail(email string) (*core.User, error) {
 	user := &core.User{
@@ -51,6 +55,10 @@ type sessionServiceMock2 struct{}
 
 func (service sessionServiceMock2) CreateSession(userId uint32) (string, error) {
 	return "xxxxxx", nil
+}
+
+func (service sessionServiceMock2) GetSession(key string) (string, error) {
+	return "session token", nil
 }
 
 func (service sessionServiceMock2) FindUserByEmail(email string) (*core.User, error) {

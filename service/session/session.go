@@ -39,6 +39,11 @@ func (service sessionService) CreateSession(userId uint32) (string, error) {
 	return sid, err
 }
 
+// GetSession gets session value from session store
+func (service sessionService) GetSession(key string) (string, error) {
+	return service.sessionStore.Get(key).Result()
+}
+
 // FindUserByEmail finds user by email and return user with transaction
 func (service sessionService) FindUserByEmail(email string) (*core.User, error) {
 	var user *core.User

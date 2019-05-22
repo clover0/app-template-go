@@ -20,7 +20,7 @@ func NewSessionStore(config config.Config) *redis.Client {
 		log.Fatalln(err)
 		panic(err)
 	}
-	log.Printf("session connected: Addr=%s db=%d",
+	log.Printf("session store connected: Addr=%s db=%d",
 		config.Session.Addr,
 		config.Session.DB,
 	)

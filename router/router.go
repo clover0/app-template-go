@@ -23,6 +23,6 @@ func Init(e *echo.Echo, s *server.Server) {
 		handler.DeleteSessionHandler(s.SessionStore),
 	)
 	e.POST("/d/auth/current",
-		handler.ShowCurrentSessionHandler(s.Api.SessionService, s.SessionStore),
+		handler.ShowCurrentSessionHandler(s.Api.SessionService),
 	)
 }
