@@ -1,5 +1,5 @@
-# Auth-Server-Template
-Auth-Server-Template is a template to build authentication server quickly with Go.
+# App-Template
+This is a template to build an application quickly with Go.
 This project shows you how to make it by DI with Go, the mechanism of authentication, 
 and the architecture of the web application.
 
